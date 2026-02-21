@@ -10,28 +10,33 @@
         body, html { width: 100%; height: 100%; background: #000; color: white; font-family: 'Arial', sans-serif; overflow: hidden; }
 
         /* Layar Login */
-        #login-screen { position: fixed; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; background: #000; }
-        .btn-google { background: white; color: black; padding: 15px 30px; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.3s; }
+        #login-screen { position: fixed; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 2000; background: #000; }
+        .btn-google { background: white; color: black; padding: 15px 30px; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 10px; }
 
-        /* Konten Utama - Full Screen */
+        /* Konten Utama */
         #main-content { display: none; width: 100vw; height: 100vh; position: relative; }
         
-        /* Video Full Tanpa Sela Hitam */
-        .video-background { position: absolute; top: 50%; left: 50%; width: 100vw; height: 100vh; transform: translate(-50%, -50%); }
-        @media (min-aspect-ratio: 16/9) { .video-background { height: 56.25vw; } }
-        @media (max-aspect-ratio: 16/9) { .video-background { width: 177.78vh; } }
-        
-        iframe { width: 100%; height: 100%; border: none; pointer-events: none; }
+        /* Navigasi - Dipaksa paling atas */
+        nav { 
+            position: fixed; 
+            top: 0; 
+            left: 0;
+            width: 100%; 
+            padding: 25px 30px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            z-index: 1000; /* Angka besar agar di depan video */
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); 
+        }
+        .logo { font-weight: 900; letter-spacing: 5px; font-size: 18px; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
+        .btn-logout { background: rgba(255, 255, 255, 0.2); color: white; border: 1px solid rgba(255,255,255,0.4); padding: 8px 20px; border-radius: 5px; cursor: pointer; backdrop-filter: blur(10px); }
 
-        /* Navbar & Menu */
-        nav { position: fixed; top: 0; width: 100%; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; z-index: 100; background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent); }
-        .logo { font-weight: 900; letter-spacing: 5px; font-size: 20px; }
-        .nav-right { display: flex; align-items: center; gap: 20px; }
-        
-        .btn-logout { background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 12px; backdrop-filter: blur(5px); transition: 0.3s; }
-        .btn-logout:hover { background: white; color: black; }
+        /* Video Area */
+        .video-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        iframe { width: 100%; height: 100%; border: none; transform: scale(1.1); } /* Sedikit scale agar menutup sela */
 
-        .user-tag { font-size: 10px; letter-spacing: 2px; opacity: 0.7; position: fixed; bottom: 20px; left: 20px; }
+        .user-tag { position: fixed; bottom: 20px; left: 20px; font-size: 10px; letter-spacing: 3px; opacity: 0.6; z-index: 1000; }
     </style>
 </head>
 <body>
@@ -46,13 +51,11 @@
 
     <div id="main-content">
         <nav>
-            <div class="logo">GRAYVANCA</div>
-            <div class="nav-right">
-                <button class="btn-logout" onclick="logout()">LOGOUT</button>
-            </div>
+            <div class="logo">LOGIN</div>
+            <button class="btn-logout" onclick="logout()">LOGOUT</button>
         </nav>
 
-        <div class="video-background">
+        <div class="video-wrapper">
             <iframe id="video" src="https://streamable.com/e/f6sywa?autoplay=1&muted=1&nocontrols=1&loop=1"></iframe>
         </div>
 
@@ -81,9 +84,7 @@
         };
 
         window.logout = () => {
-            signOut(auth).then(() => {
-                location.reload();
-            });
+            signOut(auth).then(() => location.reload());
         };
 
         onAuthStateChanged(auth, (user) => {
@@ -91,8 +92,11 @@
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('main-content').style.display = 'block';
                 document.getElementById('user-display').innerText = user.displayName.toUpperCase();
+                
+                // AKTIFKAN SUARA: Mengganti muted=1 menjadi muted=0 setelah login
                 const v = document.getElementById('video');
-                v.src = v.src.replace("muted=1", "muted=0");
+                let videoSrc = v.src;
+                v.src = videoSrc.replace("muted=1", "muted=0");
             } else {
                 document.getElementById('login-screen').style.display = 'flex';
                 document.getElementById('main-content').style.display = 'none';
