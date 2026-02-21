@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ACODE.STUDIO | AMV Portfolio</title>
+    <title>GRAYVANCA | AMV PORTFOLIO</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
@@ -11,173 +11,138 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body, html { height: 100%; overflow: hidden; background-color: #000; font-family: 'Inter', sans-serif; color: white; }
 
-        /* Background Video */
+        /* --- SCREEN LOGIN --- */
+        #login-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center;
+        }
+        .login-box {
+            text-align: center; background: rgba(255,255,255,0.05); 
+            padding: 40px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px); width: 85%; max-width: 400px;
+        }
+        .login-box h2 { letter-spacing: 5px; font-weight: 100; margin-bottom: 30px; font-size: 1.2rem; }
+        .google-btn {
+            width: 100%; padding: 15px; background: white; color: black; border: none;
+            border-radius: 10px; font-weight: bold; cursor: pointer; display: flex;
+            justify-content: center; align-items: center; gap: 10px; transition: 0.3s;
+        }
+        .google-btn:hover { transform: scale(1.02); background: #eee; }
+
+        /* --- ISI UTAMA (HIDDEN UNTIL LOGIN) --- */
+        #main-content { display: none; }
+
+        /* --- STYLE CINEMATIC KAMU --- */
         .video-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         iframe { width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
-        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.8)); z-index: 2; }
-
-        /* Navigasi */
-        nav { position: fixed; top: 0; width: 100%; padding: 30px; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
-        .logo { font-weight: 900; letter-spacing: 5px; text-transform: uppercase; font-size: 1rem; }
-        .hamburger { cursor: pointer; display: flex; flex-direction: column; gap: 7px; z-index: 110; }
-        .hamburger span { display: block; width: 30px; height: 2px; background: white; transition: 0.4s; }
-
-        /* Menu Sidebar Glassmorphism */
-        .nav-links {
-            position: fixed; top: 0; right: -100%; width: 100%; height: 100vh;
-            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            gap: 30px; transition: 0.8s cubic-bezier(0.85, 0, 0.15, 1); list-style: none; z-index: 105;
-        }
-        .nav-links.active { right: 0; }
-        .nav-links li a { color: white; text-decoration: none; font-size: 2rem; font-weight: 200; letter-spacing: 8px; transition: 0.4s; }
-        .nav-links li a:hover { color: #ffd700; letter-spacing: 12px; }
-
-        /* Music Stats (Kiri Bawah) */
-        .music-player { position: fixed; bottom: 30px; left: 30px; z-index: 10; width: 220px; }
-        .song-info { font-size: 9px; letter-spacing: 2px; margin-bottom: 8px; opacity: 0.7; text-transform: uppercase; }
-        .progress-container { width: 100%; height: 2px; background: rgba(255,255,255,0.1); border-radius: 2px; }
-        .progress-bar { width: 0%; height: 100%; background: #ffd700; box-shadow: 0 0 10px #ffd700; transition: width 0.1s linear; }
-
-        /* Panels */
-        .panel {
-            position: fixed; top: 100%; left: 0; width: 100%; height: 100vh;
-            background: rgba(0,0,0,0.95); z-index: 200; padding: 80px 30px;
-            transition: 0.6s cubic-bezier(0.85, 0, 0.15, 1); overflow-y: auto;
-        }
-        .panel.open { top: 0; }
-        .close-btn { position: absolute; top: 30px; right: 30px; font-size: 2rem; cursor: pointer; }
-
-        /* Social Icons (Kanan Bawah) */
-        .socials { position: fixed; bottom: 30px; right: 30px; display: flex; gap: 20px; z-index: 10; }
-        .socials a { color: white; font-size: 1.3rem; opacity: 0.5; transition: 0.3s; }
-        .socials a:hover { opacity: 1; color: #ffd700; transform: translateY(-5px); }
-
-        /* Main Content */
-        .content { position: relative; z-index: 3; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; pointer-events: none; }
-        h1 { font-size: clamp(2rem, 10vw, 4rem); letter-spacing: 15px; font-weight: 100; text-transform: uppercase; }
+        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.9)); z-index: 2; }
         
-        #hint { position: fixed; top: 45%; width: 100%; text-align: center; font-size: 8px; letter-spacing: 6px; opacity: 0.6; pointer-events: none; animation: blink 2s infinite; }
-
-        /* Animasi Hamburger */
-        .hamburger.toggle span:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
-        .hamburger.toggle span:nth-child(2) { opacity: 0; }
-        .hamburger.toggle span:nth-child(3) { transform: rotate(-45deg) translate(7px, -8px); }
-        @keyframes blink { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.8; } }
+        nav { position: fixed; top: 0; width: 100%; padding: 30px; display: flex; justify-content: space-between; z-index: 100; }
+        .logo { font-weight: 900; letter-spacing: 5px; font-size: 0.9rem; }
+        
+        .content { position: relative; z-index: 3; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        h1 { font-size: clamp(2rem, 8vw, 4rem); letter-spacing: 15px; font-weight: 100; }
+        
+        .music-player { position: fixed; bottom: 30px; left: 30px; z-index: 10; width: 200px; }
+        .p-bar-bg { width:100%; background:rgba(255,255,255,0.1); height:2px; margin-top:5px; }
+        #pBar { width: 0%; height: 2px; background: #ffd700; box-shadow: 0 0 10px #ffd700; }
+        
+        .socials { position: fixed; bottom: 30px; right: 30px; display: flex; gap: 20px; z-index: 10; }
+        .socials a { color: white; font-size: 1.2rem; opacity: 0.5; transition: 0.3s; }
+        .socials a:hover { opacity: 1; color: #ffd700; }
     </style>
 </head>
-<body onclick="enableAudio()">
+<body>
 
-    <nav>
-        <div class="logo">ACODE.STUDIO</div>
-        <div class="hamburger" onclick="toggleMenu(event)">
-            <span></span><span></span><span></span>
-        </div>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="#" onclick="updateText('HOME')">HOME</a></li>
-            <li><a href="#" onclick="openPanel('gallery-panel')">GALLERY</a></li>
-            <li><a href="#" onclick="openPanel('comm-panel')">COMMISSION</a></li>
-            <li><a href="#" onclick="updateText('ABOUT')">ABOUT</a></li>
-        </ul>
-    </nav>
-
-    <div id="gallery-panel" class="panel">
-        <span class="close-btn" onclick="closePanel('gallery-panel')">&times;</span>
-        <h2 style="text-align:center; letter-spacing:10px; font-weight: 200;">PROJECTS</h2>
-        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:20px; margin-top:50px;">
-            <div style="aspect-ratio:16/9; background:#111; border:1px solid #222; display:flex; align-items:center; justify-content:center; border-radius:10px;">VIDEO #1</div>
-            <div style="aspect-ratio:16/9; background:#111; border:1px solid #222; display:flex; align-items:center; justify-content:center; border-radius:10px;">VIDEO #2</div>
+    <div id="login-screen">
+        <div class="login-box">
+            <h2>GRAYVANCA</h2>
+            <button class="google-btn" onclick="signInWithGoogle()">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18">
+                LOGIN WITH GOOGLE
+            </button>
         </div>
     </div>
 
-    <div id="comm-panel" class="panel">
-        <span class="close-btn" onclick="closePanel('comm-panel')">&times;</span>
-        <h2 style="text-align:center; letter-spacing:10px; font-weight: 200;">GET A CUSTOM EDIT</h2>
-        <p style="text-align:center; font-size: 10px; opacity: 0.5; margin-top: 10px;">LET'S BRING YOUR VISION TO LIFE</p>
-    </div>
+    <div id="main-content">
+        <nav>
+            <div class="logo">PORTFOLIO.V1</div>
+            <div style="font-size: 10px; opacity: 0.5;" id="user-display"></div>
+        </nav>
 
-    <div class="video-container">
-        <iframe id="videoPlayer" src="https://streamable.com/e/f6sywa?autoplay=1&muted=1&nocontrols=1" frameborder="0" allow="autoplay"></iframe>
-        <div class="overlay"></div>
-    </div>
+        <div class="video-container">
+            <iframe id="videoPlayer" src="https://streamable.com/e/f6sywa?autoplay=1&muted=1&nocontrols=1" frameborder="0"></iframe>
+            <div class="overlay"></div>
+        </div>
 
-    <div class="content">
-        <h1 id="title">GOLDEN HOUR</h1>
-        <p id="subtitle" style="font-size: 10px; letter-spacing: 5px; opacity: 0.5; margin-top: 15px;">JVKE • CINEMATIC EDIT</p>
-    </div>
+        <div class="content">
+            <h1 id="title">GOLDEN HOUR</h1>
+            <p style="font-size: 10px; letter-spacing: 5px; opacity: 0.4; margin-top: 10px;">WELCOME, <span id="user-name"></span></p>
+        </div>
 
-    <div class="music-player">
-        <div class="song-info">NOW PLAYING: GOLDEN HOUR - JVKE</div>
-        <div class="progress-container">
-            <div class="progress-bar" id="pBar"></div>
+        <div class="music-player">
+            <div style="font-size: 7px; opacity: 0.5; letter-spacing: 2px;">SYSTEM ONLINE</div>
+            <div class="p-bar-bg"><div id="pBar"></div></div>
+        </div>
+
+        <div class="socials">
+            <a href="https://www.instagram.com/gryzyxt" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://wa.me/6285776445966" target="_blank"><i class="fab fa-whatsapp"></i></a>
         </div>
     </div>
 
-    <div class="socials">
-        <a href="https://www.instagram.com/gryzyxt?igsh=MXFrbDgyN25yMGowaw==" target="_blank">
-            <i class="fab fa-instagram"></i>
-        </a>
-        <a href="https://wa.me/6285776445966?text=Halo%20saya%20tertarik%20dengan%20jasa%20edit%20AMV%20kamu" target="_blank">
-            <i class="fab fa-whatsapp"></i>
-        </a>
-        <a href="#"><i class="fab fa-tiktok"></i></a>
-        <a href="#"><i class="fab fa-youtube"></i></a>
-    </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-    <div id="hint">TAP TO START AUDIO EXPERIENCE</div>
+        // CONFIG FIREBASE KAMU
+        const firebaseConfig = {
+            apiKey: "AIzaSyByqbxO3NXJKQoNqtuFiurNuoJut2drJZ4",
+            authDomain: "grayvanca-web.firebaseapp.com",
+            projectId: "grayvanca-web",
+            storageBucket: "grayvanca-web.firebasestorage.app",
+            messagingSenderId: "1047869825449",
+            appId: "1:1047869825449:web:1689b45e183e8599dda4b8",
+            measurementId: "G-X0HM735LD4"
+        };
 
-    <script>
-        // Progress Bar Logic
-        let progress = 0;
-        let isPlaying = false;
-        
-        setInterval(() => {
-            if(isPlaying && progress < 100) {
-                progress += 0.05;
-                document.getElementById('pBar').style.width = progress + "%";
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        // Fungsi Login
+        window.signInWithGoogle = () => {
+            signInWithPopup(auth, provider).catch(err => alert("Gagal: " + err.message));
+        };
+
+        // Kontrol Tampilan & Audio
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                gsap.to("#login-screen", { opacity: 0, duration: 1, onComplete: () => {
+                    document.getElementById('login-screen').style.display = 'none';
+                    document.getElementById('main-content').style.display = 'block';
+                    document.getElementById('user-name').innerText = user.displayName.toUpperCase();
+                    document.getElementById('user-display').innerText = user.email;
+                    startWebsite();
+                }});
             }
-        }, 100);
+        });
 
-        function toggleMenu(e) {
-            if(e) e.stopPropagation();
-            document.getElementById('navLinks').classList.toggle('active');
-            document.querySelector('.hamburger').classList.toggle('toggle');
-        }
-
-        function openPanel(id) {
-            toggleMenu();
-            document.getElementById(id).classList.add('open');
-        }
-
-        function closePanel(id) {
-            document.getElementById(id).classList.remove('open');
-        }
-
-        function enableAudio() {
+        function startWebsite() {
+            // Unmute Video
             const player = document.getElementById('videoPlayer');
-            const hint = document.getElementById('hint');
-            if(player.src.includes("muted=1")) {
-                player.src = player.src.replace("muted=1", "muted=0");
-                gsap.to(hint, { opacity: 0, duration: 1, onComplete: () => hint.remove() });
-                isPlaying = true;
-                progress = 0;
-            }
-        }
-
-        function updateText(type) {
-            toggleMenu();
-            const t = document.getElementById('title');
-            const s = document.getElementById('subtitle');
+            player.src = player.src.replace("muted=1", "muted=0");
             
-            gsap.to([t, s], { opacity: 0, y: -20, duration: 0.5, onComplete: () => {
-                if(type === 'HOME') { t.innerText = "GOLDEN HOUR"; s.innerText = "JVKE • CINEMATIC EDIT"; }
-                if(type === 'ABOUT') { t.innerText = "I AM ACODE"; s.innerText = "VISUAL STORYTELLER & EDITOR"; }
-                gsap.to([t, s], { opacity: 1, y: 0, duration: 0.8 });
-            }});
+            // Progress Bar Anim
+            let prog = 0;
+            setInterval(() => {
+                if(prog < 100) {
+                    prog += 0.1;
+                    document.getElementById('pBar').style.width = prog + "%";
+                }
+            }, 100);
         }
-
-        // Entrance Animation
-        gsap.from("#title", { opacity: 0, scale: 0.9, duration: 2.5, ease: "expo.out" });
     </script>
 </body>
-</html>
+    </html>
+    
