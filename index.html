@@ -3,91 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GRAYVANCA | AMV PORTFOLIO</title>
+    <title>GRAYVANCA | AMV</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body, html { height: 100%; overflow: hidden; background-color: #000; font-family: 'Inter', sans-serif; color: white; }
-
-        /* --- SCREEN LOGIN --- */
-        #login-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center;
-        }
-        .login-box {
-            text-align: center; background: rgba(255,255,255,0.05); 
-            padding: 40px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(20px); width: 85%; max-width: 400px;
-        }
-        .login-box h2 { letter-spacing: 5px; font-weight: 100; margin-bottom: 30px; font-size: 1.2rem; }
-        .google-btn {
-            width: 100%; padding: 15px; background: white; color: black; border: none;
-            border-radius: 10px; font-weight: bold; cursor: pointer; display: flex;
-            justify-content: center; align-items: center; gap: 10px; transition: 0.3s;
-        }
-        .google-btn:hover { transform: scale(1.02); background: #eee; }
-
-        /* --- ISI UTAMA (HIDDEN UNTIL LOGIN) --- */
-        #main-content { display: none; }
-
-        /* --- STYLE CINEMATIC KAMU --- */
-        .video-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
-        iframe { width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
-        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.9)); z-index: 2; }
-        
-        nav { position: fixed; top: 0; width: 100%; padding: 30px; display: flex; justify-content: space-between; z-index: 100; }
-        .logo { font-weight: 900; letter-spacing: 5px; font-size: 0.9rem; }
-        
-        .content { position: relative; z-index: 3; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        h1 { font-size: clamp(2rem, 8vw, 4rem); letter-spacing: 15px; font-weight: 100; }
-        
-        .music-player { position: fixed; bottom: 30px; left: 30px; z-index: 10; width: 200px; }
-        .p-bar-bg { width:100%; background:rgba(255,255,255,0.1); height:2px; margin-top:5px; }
-        #pBar { width: 0%; height: 2px; background: #ffd700; box-shadow: 0 0 10px #ffd700; }
-        
-        .socials { position: fixed; bottom: 30px; right: 30px; display: flex; gap: 20px; z-index: 10; }
-        .socials a { color: white; font-size: 1.2rem; opacity: 0.5; transition: 0.3s; }
-        .socials a:hover { opacity: 1; color: #ffd700; }
+        body { background: #000; color: white; font-family: sans-serif; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        #login-screen { text-align: center; z-index: 100; }
+        .btn-google { background: white; color: black; padding: 15px 30px; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 16px; transition: 0.3s; }
+        #main-content { display: none; position: fixed; inset: 0; }
+        iframe { width: 100%; height: 100%; border: none; }
+        .user-info { position: absolute; bottom: 30px; left: 30px; z-index: 10; font-size: 12px; letter-spacing: 5px; opacity: 0.6; }
     </style>
 </head>
 <body>
 
     <div id="login-screen">
-        <div class="login-box">
-            <h2>GRAYVANCA</h2>
-            <button class="google-btn" onclick="signInWithGoogle()">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18">
-                LOGIN WITH GOOGLE
-            </button>
-        </div>
+        <h1 style="letter-spacing: 15px; margin-bottom: 20px; font-weight: 100;">GRAYVANCA</h1>
+        <button class="btn-google" onclick="login()">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
+            SIGN IN WITH GOOGLE
+        </button>
     </div>
 
     <div id="main-content">
-        <nav>
-            <div class="logo">PORTFOLIO.V1</div>
-            <div style="font-size: 10px; opacity: 0.5;" id="user-display"></div>
-        </nav>
-
-        <div class="video-container">
-            <iframe id="videoPlayer" src="https://streamable.com/e/f6sywa?autoplay=1&muted=1&nocontrols=1" frameborder="0"></iframe>
-            <div class="overlay"></div>
-        </div>
-
-        <div class="content">
-            <h1 id="title">GOLDEN HOUR</h1>
-            <p style="font-size: 10px; letter-spacing: 5px; opacity: 0.4; margin-top: 10px;">WELCOME, <span id="user-name"></span></p>
-        </div>
-
-        <div class="music-player">
-            <div style="font-size: 7px; opacity: 0.5; letter-spacing: 2px;">SYSTEM ONLINE</div>
-            <div class="p-bar-bg"><div id="pBar"></div></div>
-        </div>
-
-        <div class="socials">
-            <a href="https://www.instagram.com/gryzyxt" target="_blank"><i class="fab fa-instagram"></i></a>
-            <a href="https://wa.me/6285776445966" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        <iframe id="video" src="https://streamable.com/e/f6sywa?autoplay=1&muted=1&nocontrols=1"></iframe>
+        <div class="user-info">
+            <p>ACCESS GRANTED: <span id="user-display"></span></p>
         </div>
     </div>
 
@@ -95,54 +36,33 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        // CONFIG FIREBASE KAMU
+        // Config Firebase kamu
         const firebaseConfig = {
             apiKey: "AIzaSyByqbxO3NXJKQoNqtuFiurNuoJut2drJZ4",
             authDomain: "grayvanca-web.firebaseapp.com",
             projectId: "grayvanca-web",
             storageBucket: "grayvanca-web.firebasestorage.app",
             messagingSenderId: "1047869825449",
-            appId: "1:1047869825449:web:1689b45e183e8599dda4b8",
-            measurementId: "G-X0HM735LD4"
+            appId: "1:1047869825449:web:1689b45e183e8599dda4b8"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
 
-        // Fungsi Login
-        window.signInWithGoogle = () => {
-            signInWithPopup(auth, provider).catch(err => alert("Gagal: " + err.message));
+        window.login = () => {
+            signInWithPopup(auth, provider).catch(err => alert("Gagal Login: " + err.message));
         };
 
-        // Kontrol Tampilan & Audio
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                gsap.to("#login-screen", { opacity: 0, duration: 1, onComplete: () => {
-                    document.getElementById('login-screen').style.display = 'none';
-                    document.getElementById('main-content').style.display = 'block';
-                    document.getElementById('user-name').innerText = user.displayName.toUpperCase();
-                    document.getElementById('user-display').innerText = user.email;
-                    startWebsite();
-                }});
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                document.getElementById('user-display').innerText = user.displayName.toUpperCase();
+                const v = document.getElementById('video');
+                v.src = v.src.replace("muted=1", "muted=0");
             }
         });
-
-        function startWebsite() {
-            // Unmute Video
-            const player = document.getElementById('videoPlayer');
-            player.src = player.src.replace("muted=1", "muted=0");
-            
-            // Progress Bar Anim
-            let prog = 0;
-            setInterval(() => {
-                if(prog < 100) {
-                    prog += 0.1;
-                    document.getElementById('pBar').style.width = prog + "%";
-                }
-            }, 100);
-        }
     </script>
 </body>
-    </html>
-    
+</html>
